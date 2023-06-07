@@ -1,5 +1,6 @@
 import numpy as np
 from utils import vcol
+import scipy.linalg
 
 def Z_normalization(D, means=None, std_v=None):
     '''Returns Z_D (Z-transformed dataset) and the corresponding Mean and Standard Deviation vectors. 
@@ -12,7 +13,17 @@ def Z_normalization(D, means=None, std_v=None):
     else:
         return (D - means) / std_v
     
+def Gaussianization(DTR, DTR_copy):
+    P = []
+    for dIdx in range(DTR.shape[0]):
+        DT = vcol(DTR_copy[dIdx, :])
+        X = DTR[dIdx, :] < DT
+        print(X)
+        R = (X.sum(1) + 1) / (DTR.shape[1] + 2)
+        P.append(scipy.stats.norm.ppf(R))
+    return np.vstack(P)
 
+#################################################################
 def centerDataset(D):
     mu_v = vcol(D.mean(axis=1))
     return D - mu_v

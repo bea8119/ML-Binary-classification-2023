@@ -354,10 +354,12 @@ def bayes_error_plots(effPriors, DCF_list, param_list, title):
     plt.legend(loc='best')
     return fig
 
+
+
+
 def heatmap():
 
-    DTR, LTR = u.load('./dataset/Train.txt')
-    DTE, LTE = u.load('./dataset/Test.txt')
+    
     
     # Pre-processing (Z-normalization)
     DTR, mean, std = f.Z_normalization(DTR)
@@ -372,4 +374,6 @@ def heatmap():
     plt.savefig()
 
 if __name__ == '__main__':
-    heatmap()
+    DTR, LTR = u.load('./dataset/Train.txt')
+    DTE, LTE = u.load('./dataset/Test.txt')
+    DTR_GAUSS = f.Gaussianization(DTR, DTR)
