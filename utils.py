@@ -43,7 +43,7 @@ def randomize(D, L, seed=0):
     
     return DTR, LTR
 ##########################################################################
-def Z_normalization(DTR, DTE):
+def znorm(DTR, DTE):
     mu_DTR = mcol(DTR.mean(1))
     std_DTR = mcol(DTR.std(1))
 
@@ -52,7 +52,7 @@ def Z_normalization(DTR, DTE):
     return DTR_z, DTE_z
 
     
-def Gaussianization(DTR, DTR_copy):
+def gaussianize_features(DTR, DTR_copy):
     P = []
     for dIdx in range(DTR.shape[0]):
         DT = mcol(DTR_copy[dIdx, :])
@@ -111,16 +111,6 @@ def LDA(D, L, m, k=2):      #D is the dataset, m is the final desired value of d
     
     
     return W
-##########################################################################
-#!log likelihood ratios
-
-
-
-
-
-
-
-
 
 
 #########################################################################
