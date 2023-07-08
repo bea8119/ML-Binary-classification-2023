@@ -1,5 +1,4 @@
-import utils as u
-import feature_utils as f
+from utils import * 
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn
@@ -360,9 +359,8 @@ def bayes_error_plots(effPriors, DCF_list, param_list, title):
 def heatmap():
 
     
-    
     # Pre-processing (Z-normalization)
-    DTR, mean, std = f.Z_normalization(DTR)
+    DTR, mean, std = Z_normalization(DTR)
     # DTE = f.Z_normalization(DTE, mean, std)
 
     # Plot distribution of attribute values (after Z-Normalizing) for each class
@@ -374,6 +372,6 @@ def heatmap():
     plt.savefig()
 
 if __name__ == '__main__':
-    DTR, LTR = u.load('./dataset/Train.txt')
-    DTE, LTE = u.load('./dataset/Test.txt')
-    DTR_GAUSS = f.Gaussianization(DTR, DTR)
+    DTR, LTR = load('./dataset/Train.txt')
+    DTE, LTE = load('./dataset/Test.txt')
+    DTR_GAUSS = Gaussianization(DTR, DTR)
