@@ -1,9 +1,10 @@
 
+
 import sys
 import numpy as np
 from MVG_func import *
 
-sys.path.append('../')
+
 from utils import *
 from prettytable import PrettyTable
 from plotting import *

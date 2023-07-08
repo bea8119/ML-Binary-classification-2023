@@ -2,13 +2,13 @@
 import sys
 import numpy
 
-sys.path.append('../')
+
 from utils import *
 
 
 def ML_GAU(D):
     m = mean(D)
-    C = covMatrix(D, m)
+    C = covMatrix(D)
     return m, C
 
 

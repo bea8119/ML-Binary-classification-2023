@@ -43,23 +43,20 @@ def randomize(D, L, seed=0):
     
     return DTR, LTR
 ##########################################################################
-def Z_normalization(D, means=None, std_v=None):
-    '''Returns Z_D (Z-transformed dataset) and the corresponding Mean and Standard Deviation vectors. 
-    If applying to a evaluation/validation set, pass the vectors of the corresponding training set obtained before'''
-    if means is None and std_v is None:
-        mean_vector = mcol(np.mean(D, axis=1))
-        std_vector = mcol(np.std(D, axis=1))
-        Z_D = (D - mean_vector) / std_vector
-        return Z_D, mean_vector, std_vector
-    else:
-        return (D - means) / std_v
+def Z_normalization(DTR, DTE):
+    mu_DTR = mcol(DTR.mean(1))
+    std_DTR = mcol(DTR.std(1))
+
+    DTR_z = (DTR - mu_DTR) / std_DTR
+    DTE_z = (DTE - mu_DTR) / std_DTR
+    return DTR_z, DTE_z
+
     
 def Gaussianization(DTR, DTR_copy):
     P = []
     for dIdx in range(DTR.shape[0]):
         DT = mcol(DTR_copy[dIdx, :])
         X = DTR[dIdx, :] < DT
-        print(X)
         R = (X.sum(1) + 1) / (DTR.shape[1] + 2)
         P.append(scipy.stats.norm.ppf(R))
     return np.vstack(P)
@@ -76,7 +73,7 @@ def covMatrix(D):
 
 ################################################################
 
-def PCA(D, m):
+def PCA(D, L, m):
     C = covMatrix(D)
 
     S, U = np.linalg.eigh(C)
@@ -103,7 +100,7 @@ def LDA(D, L, m, k=2):      #D is the dataset, m is the final desired value of d
     #Sw
     Sw = 0
     for i in range(k):      #Sw= 1/n*(n_c * C_c)        where n_c is number of samples inside class c, C_c is covariance matrix inner to class C
-        Sw += (L == i).sum() * covMatrix(D[:, L == i], mean(D))
+        Sw += (L == i).sum() * covMatrix(D[:, L == i])
 
     Sw = Sw / n
 
