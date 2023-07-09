@@ -7,7 +7,7 @@ from prettytable import PrettyTable
 from plotting import *
 from evaluator import *
 
-
+#K fold approach
 def kfold_QUAD_LR(DTR, LTR, l, pi, appendToTitle, PCA_Flag=True, gauss_Flag=False, zscore_Flag=False):
     k = 5
     Dtr = numpy.split(DTR, k, axis=1)
@@ -122,9 +122,10 @@ if __name__ == "__main__":
     DTE, LTE = load("dataset/Test.txt")
     DTE, LTE = randomize(DTE, LTE)
     
+    
     print("############    Quadratic Logistic Regression    ##############")
     L = [1e-5]  #lambda regularization term
-    validation_quad_LR(DTR, LTR, L, 'QUAD_', PCA_Flag=True, gauss_Flag=False, zscore_Flag=False)    #RAW features
-    
-
+    validation_quad_LR(DTR, LTR, L, 'QUAD_', PCA_Flag=True, gauss_Flag=False, zscore_Flag=False)        #RAW features
+    validation_quad_LR(DTR, LTR, L, 'GAUSSIANIZED_', PCA_Flag=True, gauss_Flag=True, zscore_Flag=False) #Gaussianized features
+    validation_quad_LR(DTR, LTR, L, 'ZNORM_', PCA_Flag=True, gauss_Flag=False, zscore_Flag=True)        #Z-normed features
 
