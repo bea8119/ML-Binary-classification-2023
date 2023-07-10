@@ -125,7 +125,7 @@ if __name__ == "__main__":
     
     print("############    Quadratic Logistic Regression    ##############")
     L = [1e-5]  #lambda regularization term
-    validation_quad_LR(DTR, LTR, L, 'QUAD_', PCA_Flag=True, gauss_Flag=False, zscore_Flag=False)        #RAW features
+    validation_quad_LR(DTR, LTR, L, 'RAW_', PCA_Flag=True, gauss_Flag=False, zscore_Flag=False)        #RAW features
     validation_quad_LR(DTR, LTR, L, 'GAUSSIANIZED_', PCA_Flag=True, gauss_Flag=True, zscore_Flag=False) #Gaussianized features
     validation_quad_LR(DTR, LTR, L, 'ZNORM_', PCA_Flag=True, gauss_Flag=False, zscore_Flag=True)        #Z-normed features
 
