@@ -66,13 +66,13 @@ def SVM_wrapper(D, L, K_svm, C, priorT_b, idxTrain, idxTest, triplet, c=None, d=
 
     # Apply Z-normalization on the training set (of the current fold), apply the same transformation on the test set
     if (zscore):
-        DTR, DTE= Z_normalization(DTR, DTE)
+        DTR, DTE= znorm(DTR, DTE)
     
     #Apply gaussianization on training set
     if (Gauss_flag):
         D_training = DTR
-        DTR = Gaussianization(DTR, DTR)
-        DTE = Gaussianization(D_training, DTE)
+        DTR = gaussianize_features(DTR, DTR)
+        DTE = gaussianize_features(D_training, DTE)
 
 
     if not kern:
