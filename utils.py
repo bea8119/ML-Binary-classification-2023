@@ -73,7 +73,7 @@ def covMatrix(D):
 
 ################################################################
 
-def PCA(D, L, m):
+def PCA(D, m):
     C = covMatrix(D)
 
     S, U = np.linalg.eigh(C)
@@ -173,3 +173,6 @@ def reduced_dataset(D, L, N, seed=0):
     idx = np.random.permutation(D.shape[1]) # take a random order of indexes from 0 to N
     idx_trunc = idx[:N]
     return D[:, idx_trunc], L[idx_trunc]
+
+
+###########################################################################

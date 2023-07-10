@@ -1,0 +1,134 @@
+RAW FEATURES
+5-Fold cross-validation Linear SVM (no PCA) (uncalibrated)
+
+Application point (pi_eff: 0.5, C_fn: 1, C_fp: 1)
+****************************************************
+-----------------------------------------------------
+Linear SVM (K = 1, C = 10, priorT = unb) -> min DCF: 0.122    act DCF: 0.138
+Linear SVM (K = 1, C = 10, priorT = 0.5) -> min DCF: 0.169    act DCF: 0.172
+
+Linear SVM (K = 1, C = 10, priorT = 0.1) -> min DCF: 0.129    act DCF: 0.189
+
+Application point (pi_eff: 0.1, C_fn: 1, C_fp: 1)
+****************************************************
+Linear SVM (K = 1, C = 10, priorT = unb) -> min DCF: 0.346    act DCF: 0.362
+Linear SVM (K = 1, C = 10, priorT = 0.5) -> min DCF: 0.639    act DCF: 0.662
+
+Linear SVM (K = 1, C = 10, priorT = 0.1) -> min DCF: 0.32    act DCF: 0.632
+
+
+Application point (pi_eff: 0.9, C_fn: 1, C_fp: 1)
+****************************************************
+Linear SVM (K = 1, C = 10, priorT = unb) -> min DCF: 0.357    act DCF: 0.539
+Linear SVM (K = 1, C = 10, priorT = 0.5) -> min DCF: 0.414    act DCF: 0.511
+
+Linear SVM (K = 1, C = 10, priorT = 0.1) -> min DCF: 0.411    act DCF: 0.418
+
+
+
+Z-Normalizing
+Application point (pi_eff: 0.5, C_fn: 1, C_fp: 1)
+****************************************************
+Linear SVM (K = 1, C = 10, priorT = unb) -> min DCF: 0.111    act DCF: 0.126
+ Linear SVM (K = 1, C = 10, priorT = 0.5) -> min DCF: 0.115    act DCF: 0.125
+
+Application point (pi_eff: 0.1, C_fn: 1, C_fp: 1)
+****************************************************
+  Linear SVM (K = 1, C = 10, priorT = unb) -> min DCF: 0.315    act DCF: 0.335
+  Linear SVM (K = 1, C = 10, priorT = 0.5) -> min DCF: 0.293    act DCF: 0.421
+
+Application point (pi_eff: 0.9, C_fn: 1, C_fp: 1)
+****************************************************
+Linear SVM (K = 1, C = 10, priorT = unb) -> min DCF: 0.34    act DCF: 0.528
+ Linear SVM (K = 1, C = 10, priorT = 0.5) -> min DCF: 0.355    act DCF: 0.457
+
+
+
+ Gaussianized
+
+ Application point (pi_eff: 0.5, C_fn: 1, C_fp: 1)
+****************************************************
+ Linear SVM (K = 1, C = 10, priorT = unb) -> min DCF: 0.131    act DCF: 0.155
+ Linear SVM (K = 1, C = 10, priorT = 0.5) -> min DCF: 0.132    act DCF: 0.134
+
+ Application point (pi_eff: 0.1, C_fn: 1, C_fp: 1)
+****************************************************
+
+Linear SVM (K = 1, C = 10, priorT = unb) -> min DCF: 0.34    act DCF: 0.371
+ Linear SVM (K = 1, C = 10, priorT = 0.5) -> min DCF: 0.338    act DCF: 0.412
+-----------------------------------------------------
+
+Application point (pi_eff: 0.9, C_fn: 1, C_fp: 1)
+****************************************************
+Linear SVM (K = 1, C = 10, priorT = unb) -> min DCF: 0.345    act DCF: 0.509
+Linear SVM (K = 1, C = 10, priorT = 0.5) -> min DCF: 0.354    act DCF: 0.451
+
+
+
+
+
+C =0.1 , raw
+
+Application point (pi_eff: 0.5, C_fn: 1, C_fp: 1)
+****************************************************
+Linear SVM (K = 1, C = 0.1, priorT = unb) -> min DCF: 0.113    act DCF: 0.12
+Linear SVM (K = 1, C = 0.1, priorT = 0.5) -> min DCF: 0.115    act DCF: 0.124
+-----------------------------------------------------
+
+Application point (pi_eff: 0.1, C_fn: 1, C_fp: 1)
+****************************************************
+Linear SVM (K = 1, C = 0.1, priorT = unb) -> min DCF: 0.315    act DCF: 0.349
+Linear SVM (K = 1, C = 0.1, priorT = 0.5) -> min DCF: 0.295    act DCF: 0.425
+
+Application point (pi_eff: 0.9, C_fn: 1, C_fp: 1)
+****************************************************
+Linear SVM (K = 1, C = 0.1, priorT = unb) -> min DCF: 0.337    act DCF: 0.533
+Linear SVM (K = 1, C = 0.1, priorT = 0.5) -> min DCF: 0.351    act DCF: 0.459
+
+
+
+C =0.1 , Z Normalizing
+
+Application point (pi_eff: 0.5, C_fn: 1, C_fp: 1)
+****************************************************
+-----------------------------------------------------
+Linear SVM (K = 1, C = 0.1, priorT = unb) -> min DCF: 0.117    act DCF: 0.122
+Linear SVM (K = 1, C = 0.1, priorT = 0.5) -> min DCF: 0.12    act DCF: 0.124
+-----------------------------------------------------
+
+Application point (pi_eff: 0.1, C_fn: 1, C_fp: 1)
+****************************************************
+-----------------------------------------------------
+Linear SVM (K = 1, C = 0.1, priorT = unb) -> min DCF: 0.303    act DCF: 0.546
+Linear SVM (K = 1, C = 0.1, priorT = 0.5) -> min DCF: 0.29    act DCF: 0.608
+-----------------------------------------------------
+
+Application point (pi_eff: 0.9, C_fn: 1, C_fp: 1)
+****************************************************
+-----------------------------------------------------
+ Linear SVM (K = 1, C = 0.1, priorT = unb) -> min DCF: 0.351    act DCF: 0.722
+Linear SVM (K = 1, C = 0.1, priorT = 0.5) -> min DCF: 0.35    act DCF: 0.622
+
+
+
+Gaussianized C=0.1
+Application point (pi_eff: 0.5, C_fn: 1, C_fp: 1)
+****************************************************
+Linear SVM (K = 1, C = 0.1, priorT = unb) -> min DCF: 0.132    act DCF: 0.158
+Linear SVM (K = 1, C = 0.1, priorT = 0.5) -> min DCF: 0.128    act DCF: 0.139
+-----------------------------------------------------
+
+Application point (pi_eff: 0.1, C_fn: 1, C_fp: 1)
+****************************************************
+-----------------------------------------------------
+Linear SVM (K = 1, C = 0.1, priorT = unb) -> min DCF: 0.336    act DCF: 0.495
+ Linear SVM (K = 1, C = 0.1, priorT = 0.5) -> min DCF: 0.336    act DCF: 0.569
+-----------------------------------------------------
+
+Application point (pi_eff: 0.9, C_fn: 1, C_fp: 1)
+****************************************************
+-----------------------------------------------------
+Linear SVM (K = 1, C = 0.1, priorT = unb) -> min DCF: 0.351    act DCF: 0.711
+Linear SVM (K = 1, C = 0.1, priorT = 0.5) -> min DCF: 0.348    act DCF: 0.575
+-----------------------------------------------------
+

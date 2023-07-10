@@ -1,0 +1,132 @@
+Raw  C=0.001,  c=1
+
+Application point (pi_eff: 0.5, C_fn: 1, C_fp: 1)
+****************************************************        
+
+ Quadratic Kernel SVM (K = 1, C = 0.001, priorT = unb) -> min DCF: 0.131    act DCF: 0.136
+ Quadratic Kernel SVM (K = 1, C = 0.001, priorT = 0.5) -> min DCF: 0.134    act DCF: 0.137
+-----------------------------------------------------       
+
+Application point (pi_eff: 0.1, C_fn: 1, C_fp: 1)
+****************************************************        
+
+Quadratic Kernel SVM (K = 1, C = 0.001, priorT = unb) -> min DCF: 0.335    act DCF: 0.345
+Quadratic Kernel SVM (K = 1, C = 0.001, priorT = 0.5) -> min DCF: 0.335    act DCF: 0.364
+-----------------------------------------------------     
+
+Application point (pi_eff: 0.9, C_fn: 1, C_fp: 1)
+****************************************************
+
+Quadratic Kernel SVM (K = 1, C = 0.001, priorT = unb) -> min DCF: 0.334    act DCF: 0.456
+Quadratic Kernel SVM (K = 1, C = 0.001, priorT = 0.5) -> min DCF: 0.373    act DCF: 0.413
+
+
+
+Z norm
+Application point (pi_eff: 0.5, C_fn: 1, C_fp: 1)
+****************************************************
+Quadratic Kernel SVM (K = 1, C = 0.001, priorT = unb) -> min DCF: 0.203    act DCF: 0.369
+ Quadratic Kernel SVM (K = 1, C = 0.001, priorT = 0.5) -> min DCF: 0.2    act DCF: 0.208
+-----------------------------------------------------
+
+Application point (pi_eff: 0.1, C_fn: 1, C_fp: 1)
+****************************************************
+Quadratic Kernel SVM (K = 1, C = 0.001, priorT = unb) -> min DCF: 0.535    act DCF: 1.0
+ Quadratic Kernel SVM (K = 1, C = 0.001, priorT = 0.5) -> min DCF: 0.464    act DCF: 0.999
+-----------------------------------------------------
+
+Application point (pi_eff: 0.9, C_fn: 1, C_fp: 1)
+****************************************************
+-----------------------------------------------------
+Quadratic Kernel SVM (K = 1, C = 0.001, priorT = unb) -> min DCF: 0.559    act DCF: 0.964
+Quadratic Kernel SVM (K = 1, C = 0.001, priorT = 0.5) -> min DCF: 0.505    act DCF: 0.944
+
+
+Gaussianized
+
+Application point (pi_eff: 0.5, C_fn: 1, C_fp: 1)
+****************************************************
+Quadratic Kernel SVM (K = 1, C = 0.001, priorT = unb) -> min DCF: 0.195    act DCF: 0.329
+Quadratic Kernel SVM (K = 1, C = 0.001, priorT = 0.5) -> min DCF: 0.186    act DCF: 0.187
+-----------------------------------------------------
+
+Application point (pi_eff: 0.1, C_fn: 1, C_fp: 1)
+****************************************************
+-----------------------------------------------------
+Quadratic Kernel SVM (K = 1, C = 0.001, priorT = unb) -> min DCF: 0.585    act DCF: 0.999
+Quadratic Kernel SVM (K = 1, C = 0.001, priorT = 0.5) -> min DCF: 0.485    act DCF: 1.0
+-----------------------------------------------------
+
+Application point (pi_eff: 0.9, C_fn: 1, C_fp: 1)
+****************************************************
+Quadratic Kernel SVM (K = 1, C = 0.001, priorT = unb) -> min DCF: 0.538    act DCF: 0.971
+Quadratic Kernel SVM (K = 1, C = 0.001, priorT = 0.5) -> min DCF: 0.493    act DCF: 0.942
+
+
+
+
+C=0.001, c=5
+
+RAW
+
+Application point (pi_eff: 0.5, C_fn: 1, C_fp: 1)
+****************************************************
+Linear SVM (K = 1, C = 0.001, priorT = unb) -> min DCF: 0.115    act DCF: 0.128
+Linear SVM (K = 1, C = 0.001, priorT = 0.5) -> min DCF: 0.118    act DCF: 0.12
+-----------------------------------------------------
+
+Application point (pi_eff: 0.1, C_fn: 1, C_fp: 1)
+****************************************************
+
+Linear SVM (K = 1, C = 0.001, priorT = unb) -> min DCF: 0.303    act DCF: 0.608
+Linear SVM (K = 1, C = 0.001, priorT = 0.5) -> min DCF: 0.298    act DCF: 0.687
+-----------------------------------------------------
+
+Application point (pi_eff: 0.9, C_fn: 1, C_fp: 1)
+****************************************************
+Linear SVM (K = 1, C = 0.001, priorT = unb) -> min DCF: 0.355    act DCF: 0.824
+Linear SVM (K = 1, C = 0.001, priorT = 0.5) -> min DCF: 0.347    act DCF: 0.698
+-----------------------------------------------------
+
+
+Z-Normalizing
+
+Application point (pi_eff: 0.5, C_fn: 1, C_fp: 1)
+****************************************************
+Linear SVM (K = 1, C = 0.001, priorT = unb) -> min DCF: 0.206    act DCF: 0.294
+Linear SVM (K = 1, C = 0.001, priorT = 0.5) -> min DCF: 0.214    act DCF: 0.236
+-----------------------------------------------------
+
+Application point (pi_eff: 0.1, C_fn: 1, C_fp: 1)
+****************************************************
+-----------------------------------------------------
+5-Fold cross-validation Linear SVM (no PCA) (uncalibrated)
+Linear SVM (K = 1, C = 0.001, priorT = unb) -> min DCF: 0.449    act DCF: 0.999
+ Linear SVM (K = 1, C = 0.001, priorT = 0.5) -> min DCF: 0.465    act DCF: 0.999
+-----------------------------------------------------
+
+Application point (pi_eff: 0.9, C_fn: 1, C_fp: 1)
+****************************************************
+Linear SVM (K = 1, C = 0.001, priorT = unb) -> min DCF: 0.617    act DCF: 1.0
+Linear SVM (K = 1, C = 0.001, priorT = 0.5) -> min DCF: 0.618    act DCF: 0.994
+
+
+Gaussianized
+Application point (pi_eff: 0.5, C_fn: 1, C_fp: 1)
+****************************************************
+
+Linear SVM (K = 1, C = 0.001, priorT = unb) -> min DCF: 0.2    act DCF: 0.255
+Linear SVM (K = 1, C = 0.001, priorT = 0.5) -> min DCF: 0.204    act DCF: 0.231
+-----------------------------------------------------
+
+Application point (pi_eff: 0.1, C_fn: 1, C_fp: 1)
+****************************************************
+Linear SVM (K = 1, C = 0.001, priorT = unb) -> min DCF: 0.451    act DCF: 1.0
+Linear SVM (K = 1, C = 0.001, priorT = 0.5) -> min DCF: 0.48    act DCF: 1.0
+-----------------------------------------------------
+
+Application point (pi_eff: 0.9, C_fn: 1, C_fp: 1)
+****************************************************
+Linear SVM (K = 1, C = 0.001, priorT = unb) -> min DCF: 0.559    act DCF: 1.0
+Linear SVM (K = 1, C = 0.001, priorT = 0.5) -> min DCF: 0.576    act DCF: 0.996
+-----------------------------------------------------
