@@ -106,12 +106,12 @@ def validation_MVG(DTR, LTR, appendToTitle, PCA_Flag=True, Gauss_flag = False, z
         Lte = Ltr[i]
 
         if (zscore):
-            D, Dte = Z_normalization(D, Dte)
+            D, Dte = znorm(D, Dte)
 
         if (Gauss_flag):
             D_training = D
-            D = Gaussianization(D, D)
-            Dte = Gaussianization(D_training, Dte)
+            D = gaussianize_features(D, D)
+            Dte = gaussianize_features(D_training, Dte)
 
         MVG_labels = np.append(MVG_labels, Lte, axis=0)
         MVG_labels = np.hstack(MVG_labels)

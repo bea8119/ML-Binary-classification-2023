@@ -1,4 +1,5 @@
 from utils import * 
+from evaluator import *
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn
@@ -319,15 +320,57 @@ def plotGMM(n_splits, dcf_min_list, eff_prior, tied_diag_pairs, colors, PCA_list
         plt.tight_layout()
         plt.grid(visible=True)
     
-def ROC_curves(FPR_list, TPR_list, csf_names):
-    fig = plt.figure('ROC')
-    for FPR, TPR, name in zip(FPR_list, TPR_list, csf_names):
-        plt.plot(FPR, TPR, label=name)
-    plt.xlabel('FPR')
-    plt.ylabel('TPR')
-    plt.grid()
-    plt.legend(loc='best')
-    return fig
+#########################################################################################################
+def bayes_error_plot(pArray, scores, labels, minCost=False, th=None):
+    y = []
+    for p in pArray:
+        pi = 1.0 / (1.0 + np.exp(-p))
+        if minCost:
+            y.append(compute_min_DCF(scores, labels, pi, 1, 1))
+        else:
+            y.append(compute_act_DCF(scores, labels, pi, 1, 1, th))
+    return np.array(y)
+
+
+def bayes_error_plot_compare(pi, scores, labels):
+    y = []
+#    pi = 1.0 / (1.0 + np.exp(-pi)) 
+    y.append(compute_min_DCF(scores, labels, pi, 1, 1))
+    return np.array(y)
+
+def plot_DCF(x, y, xlabel, title, base=10):
+    plt.figure()
+    plt.plot(x, y[0], label= 'min DCF prior=0.5', color='b')
+    plt.plot(x, y[1], label= 'min DCF prior=0.9', color='g')
+    plt.plot(x, y[2], label= 'min DCF prior=0.1', color='r')
+    plt.xlim([min(x), max(x)])
+    plt.xscale("log", base=base)
+    plt.legend([ "min DCF prior=0.5", "min DCF prior=0.9", "min DCF prior=0.1"])
+    plt.xlabel(xlabel)
+    plt.ylabel("min DCF")
+    plt.savefig('./images/DCF_' + title+ '.svg')
+    plt.show()
+    return
+
+
+def plot_ROC(llrs, LTE, title):
+    thresholds = numpy.array(llrs)
+    thresholds.sort()
+    thresholds = numpy.concatenate([numpy.array([-numpy.inf]), thresholds, numpy.array([numpy.inf])])   #evaluate all possible thresholds in range [-infinte, s_1,...,s_m, +infinite] where s_1,s_m are the test scores! 
+    
+    FPR = numpy.zeros(thresholds.size)
+    TPR = numpy.zeros(thresholds.size)
+    for idx, t in enumerate(thresholds):
+        Pred = numpy.int32(llrs > t)                    #make label prediction
+        conf = confusion_matrix_binary(Pred, LTE)
+        TPR[idx] = conf[1, 1] / (conf[1, 1] + conf[0, 1])
+        FPR[idx] = conf[1, 0] / (conf[1, 0] + conf[0, 0])
+    
+    pylab.plot(FPR, TPR)
+    pylab.title(title)
+    pylab.savefig('./images/ROC_' + title + '.png')
+    pylab.show()
+    
 
 def DET_curves(FPR_list, FNR_list, csf_names):
     fig = plt.figure('DET')
@@ -358,9 +401,8 @@ def bayes_error_plots(effPriors, DCF_list, param_list, title):
 
 def heatmap():
 
-    
     # Pre-processing (Z-normalization)
-    DTR, mean, std = Z_normalization(DTR)
+    DTR, mean, std = znorm(DTR)
     # DTE = f.Z_normalization(DTE, mean, std)
 
     # Plot distribution of attribute values (after Z-Normalizing) for each class
@@ -371,7 +413,10 @@ def heatmap():
     plt.show()
     plt.savefig()
 
+
+
+
 if __name__ == '__main__':
     DTR, LTR = load('./dataset/Train.txt')
     DTE, LTE = load('./dataset/Test.txt')
-    DTR_GAUSS = Gaussianization(DTR, DTR)
+    DTR_GAUSS = gaussianize_features(DTR, DTR)
