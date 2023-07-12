@@ -3,29 +3,29 @@ import numpy as np
 import SVM_func as SVM
 
 
-gauss_flag=True
+gauss_flag=False
 zscore=False
 
 PCA_list = [None]
 
-kernel_SVM = False # False for Linear SVM, regardless of the next flag
-Poly_RBF = True # True for polynomial, False for RBF kernel SVM (assuming kernel flag == True)
+kernel_SVM = True # False for Linear SVM, regardless of the next flag
+Poly_RBF = False # True for polynomial, False for RBF kernel SVM (assuming kernel flag == True)
 K_svm = 1 # Value of sqrt(psi)
 
 # Pair of (C, priorT_balance)
-SVM_param_list = [ (0.001, None), (0.001, 0.5)
-#    , (10, 0.1)
+SVM_param_list = [ #(10, None), (10, 0.5)
+     (10, 0.1) , (10, 0.9)
 ]
 
 calibrate = False
 saveScores = False
 
 # (x1T_x2 + c)^2 Polynomial kernel params
-c = 5
+c = 1
 d = 2
 
 # RBF parameter
-gamma = 1e-1
+gamma = 1e-2
 
 printStatus = True
 
