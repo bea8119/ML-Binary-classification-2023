@@ -1,8 +1,15 @@
+import sys
+import numpy
 from utils import *
-#from LogReg import calibrate_scores
-from DCF import DCF_unnormalized_normalized_min_binary
-import numpy as np
-import scipy.optimize
+from evaluator import *
+from plotting import *
+import matplotlib
+import matplotlib.pyplot as plt
+import pylab
+import scipy.linalg
+import sklearn.datasets
+import scipy.optimize as opt
+from prettytable import PrettyTable
 
 def extended_D(sample_vector, K):
     # K is not the number of classes, it is the factor of extension of the dataset

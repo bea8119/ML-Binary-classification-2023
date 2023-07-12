@@ -413,7 +413,116 @@ def heatmap():
     plt.show()
     plt.savefig()
 
+#GMM plots
+    
 
+def print_minDCF_tables(score_raw, score_gauss, components):
+    types = ['full-cov', 'diag-cov', 'tied full-cov', 'tied diag-cov']
+    
+    header = ['']
+    n_comp = len(components)
+    print(np.shape(score_raw))
+    print(score_raw)
+    score_raw = np.reshape(np.hstack(score_raw), (n_comp, 4)).T
+    score_gauss = np.reshape(np.hstack(score_gauss), (n_comp, 4)).T
+    
+    comp = np.exp2(components).astype(int).tolist()
+
+    print(np.shape(score_raw))
+    for i in comp:
+        header.append(i)
+    print(header)
+    for i in range(len(types)):
+        t1 = PrettyTable(header)
+        
+        t1.title = types[i]
+        
+        raw_full = score_raw[i].tolist()
+        gauss_full = score_gauss[i].tolist()
+        
+        raw_full.insert(0,'raw')
+        gauss_full.insert(0,'gaussianized')
+        t1.add_row(raw_full)
+        t1.add_row(gauss_full)
+        print(t1)
+        plot_minDCF_GMM(score_raw[i].tolist(), score_gauss[i].tolist(), types[i], components)
+             
+def print_act_DCF_tables(score_raw, score_gauss, components):
+    types = ['full-cov', 'diag-cov', 'tied full-cov', 'tied diag-cov']
+    
+    header = ['']
+    n_comp = len(components)
+    print(np.shape(score_raw))
+    print(score_raw)
+    score_raw = np.reshape(np.hstack(score_raw), ((n_comp), 4)).T
+    score_gauss = np.reshape(np.hstack(score_gauss), ((n_comp), 4)).T
+    
+    comp = np.exp2(components).astype(int).tolist()
+
+    
+    print(np.shape(score_raw))
+    for i in comp:
+        header.append(i)
+    print(header)
+    for i in range(len(types)):
+        t1 = PrettyTable(header)
+        
+        t1.title = types[i]
+        
+        raw_full = score_raw[i].tolist()
+        gauss_full = score_gauss[i].tolist()
+        
+        raw_full.insert(0,'raw')
+        gauss_full.insert(0,'gaussianized')
+        t1.add_row(raw_full)
+        t1.add_row(gauss_full)
+        print(t1)
+
+
+
+def plot_minDCF_GMM(score_raw, score_gauss, title, components):
+    labels = np.exp2(components).astype(int)
+    
+    # for i in range(components):
+    #     labels.append(2 ** (i+1))
+    
+ 
+    x = np.arange(len(labels))  # the label locations
+    width = 0.35  # the width of the bars
+    plt.bar(x - 0.2, score_raw, width, label = 'Raw')
+    plt.bar(x + 0.2, score_gauss, width, label = 'Gaussianized')
+      
+    plt.xticks(x, labels)
+    plt.ylabel("DCF")
+    plt.title(title)
+    plt.legend()
+    plt.savefig('./images/GMM/' + title)
+    plt.show()
+    
+
+
+def bayes_error_min_act_plot_GMM(D, LTE, pi, title, ylim):
+    p = numpy.linspace(-3, 3, 21)
+    pylab.title(title)
+    pylab.plot(p, bayes_error_plot(p, D, LTE, minCost=False), color='r', label='actDCF')
+    pylab.plot(p, bayes_error_plot(p, D, LTE, minCost=True), 'r--', label='minDCF')
+    pylab.plot(p, bayes_error_plot(p, D, LTE, minCost=False, th=-np.log(pi / (1-pi))), color='y', label='theoretical')
+    pylab.ylim(0, ylim)
+    pylab.legend()
+    pylab.savefig('./images/DCF_' + title + '.png')
+    pylab.show()
+    
+    
+
+def bayes_plot_bestGMM(title, width, pi, GMM_llrs, GMM_llrsn, GMM_llrst, GMM_llrsnt, GMM_labels):
+    bayes_error_min_act_plot_GMM(GMM_llrs, GMM_labels, pi, title + 'GMM_full', width)
+    bayes_error_min_act_plot_GMM(GMM_llrsn, GMM_labels, pi, title + 'GMM_diag', width)
+    bayes_error_min_act_plot_GMM(GMM_llrst, GMM_labels, pi, title + 'GMM_tied', width)
+    bayes_error_min_act_plot_GMM(GMM_llrsnt, GMM_labels, pi, title + 'GMM_tied_diag', width)
+'''
+def ROC_GMM():
+ '''   
+   
 
 
 if __name__ == '__main__':
