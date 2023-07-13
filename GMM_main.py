@@ -184,8 +184,8 @@ if __name__ == "__main__":
     
     print("############    Gaussian Mixture Models   ##############")
     validation_GMM_tot(DTR, LTR, 0.5)
-    validation_GMM_ncomp(DTR, LTR, 0.5, 2)
-    validation_GMM_ncomp(DTR, LTR, 0.1, 2)
-    validation_GMM_ncomp(DTR, LTR, 0.9, 2)
+    validation_GMM_ncomp(DTR, LTR, 0.5, 4)
+    validation_GMM_ncomp(DTR, LTR, 0.1, 4)
+    validation_GMM_ncomp(DTR, LTR, 0.9, 4)
 
 
