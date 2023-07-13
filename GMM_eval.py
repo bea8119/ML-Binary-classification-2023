@@ -214,7 +214,7 @@ def bayes_plot_bestGMM(title, pi, GMM_llrs, GMM_llrsn, GMM_llrst, GMM_llrsnt, GM
 
 def evaluation_GMM_ncomp(DTR, LTR, DTE, LTE, pi, n, zscore=False, Gauss_flag=False):
     
-    raw_min, raw_act, raw_x, GMM_llrs, GMM_llrsn, GMM_llrst, GMM_llrsnt, GMM_labels = evaluation_GMM(
+    raw_min, raw_act, raw_x, GMM_llrs_raw, GMM_llrsn_raw, GMM_llrst_raw, GMM_llrsnt_raw, GMM_labels_raw = evaluation_GMM(
         DTR, LTR, DTE, LTE, pi, n, zscore, Gauss_flag=False)
     gauss_min, gauss_act, gauss_x, GMM_llrs_g, GMM_llrsn_g, GMM_llrst_g, GMM_llrsnt_g, GMM_labels_g = evaluation_GMM(DTR, LTR, DTE, LTE, pi, n, zscore=zscore, Gauss_flag=True)
     print(raw_act, raw_x)
