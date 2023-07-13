@@ -1,4 +1,9 @@
 import numpy as np
+import pylab
+import scipy.linalg
+import sklearn.datasets
+import scipy.optimize as opt
+
 
 def vcol(oneDarray):
     return oneDarray.reshape((oneDarray.size, 1))
@@ -22,6 +27,23 @@ def load(filename):
     f.close()
     labelVector = np.array(labelVector) # 1D array
     return datasetList, labelVector
+
+def gaussianize_features(DTR, DTR_copy):
+    P = []
+    for dIdx in range(DTR.shape[0]):
+        DT = vcol(DTR_copy[dIdx, :])
+        X = DTR[dIdx, :] < DT
+        R = (X.sum(1) + 1) / (DTR.shape[1] + 2)
+        P.append(scipy.stats.norm.ppf(R))
+    return np.vstack(P)
+
+def znorm(DTR, DTE):
+    mu_DTR = vcol(DTR.mean(1))
+    std_DTR = vcol(DTR.std(1))
+
+    DTR_z = (DTR - mu_DTR) / std_DTR
+    DTE_z = (DTE - mu_DTR) / std_DTR
+    return DTR_z, DTE_z
 
 def split_db_n_to_1(D, n, seed=0):
     '''Returns idxTrain and idxTest according to n-to-1 splitting (n is given by the user)'''

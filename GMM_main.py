@@ -167,6 +167,9 @@ def validation_GMM_tot(DTR, LTR, pi, zscore=False, gauss=False):
     print("======= theoretical =======")
     print_act_DCF_tables(score_raw_xvd, score_gauss_xvd, componentsToTry)
 
+
+    
+
     
 
 

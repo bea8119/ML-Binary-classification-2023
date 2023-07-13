@@ -42,22 +42,22 @@ def plot_minDCF_GMM_eval(score_raw, score_gauss, title, components):
     raw_val, raw_eval = score_raw
     gauss_val, gauss_eval = score_gauss
 
-    # for i in range(components):
-    #     labels.append(2 ** (i+1))
+    for i in range(components):
+        labels.append(2 ** (i+1))
 
-    x = np.arange(len(labels))  # the label locations
-    width = 0.1  # the width of the bars
-    plt.bar(x - 0.15, raw_val, width, label='Raw [val]', edgecolor='black', color='tab:orange', alpha=0.5)
-    plt.bar(x - 0.05, raw_eval, width, label='Raw [eval]', edgecolor='black', color='tab:orange')
-    plt.bar(x + 0.05, gauss_val, width, label='Gauss [val]', edgecolor='black', color='r', alpha=0.5)
-    plt.bar(x + 0.15, gauss_eval, width, label='Gauss [eval]', edgecolor='black', color='r')
+        x = np.arange(len(labels))  # the label locations
+        width = 0.1  # the width of the bars
+        plt.bar(x - 0.15, raw_val, width, label='Raw [val]', edgecolor='black', color='tab:orange', alpha=0.5)
+        plt.bar(x - 0.05, raw_eval, width, label='Raw [eval]', edgecolor='black', color='tab:orange')
+        plt.bar(x + 0.05, gauss_val, width, label='Gauss [val]', edgecolor='black', color='r', alpha=0.5)
+        plt.bar(x + 0.05, gauss_eval, width, label='Gauss [eval]', edgecolor='black', color='r')
 
-    plt.xticks(x, labels)
-    plt.ylabel("DCF")
-    plt.title(title)
-    plt.legend()
-    plt.savefig('./images/GMM/' + title)
-    plt.show()
+        plt.xticks(x, labels)
+        plt.ylabel("DCF")
+        plt.title(title)
+        plt.legend()
+        plt.savefig('./images/GMM/' + title)
+        plt.show()
 
 
 def print_minDCF_tables(score_raw, score_gauss, components):
@@ -142,7 +142,7 @@ def plot_minDCF_GMM(score_raw, score_gauss, title, components):
     plt.show()
 
 
-def evaluation_GMM(DTR, LTR, DTE, LTE, pi, comp, zscore=False):
+def evaluation_GMM(DTR, LTR, DTE, LTE, pi, comp, zscore=False, Gauss_flag=False):
     GMM_llrs = []
     GMM_llrsn = []
     GMM_llrst = []
@@ -158,6 +158,10 @@ def evaluation_GMM(DTR, LTR, DTE, LTE, pi, comp, zscore=False):
 
     if (zscore):
         D = scipy.stats.zscore(D, axis=1)
+    if(Gauss_flag):
+            D_training = D
+            D = gaussianize_features(D, D)
+            Dte = gaussianize_features(D_training, Dte)
 
     print("components: " + str(comp))
     GMM_labels = np.append(GMM_labels, Lte)
@@ -167,6 +171,7 @@ def evaluation_GMM(DTR, LTR, DTE, LTE, pi, comp, zscore=False):
 
     # full-cov
     GMM_llrs = ll_GMM(D, L, Dte, Lte, GMM_llrs, 'full', comp)
+    
 
     # diag-cov
     GMM_llrsn = ll_GMM(D, L, Dte, Lte, GMM_llrsn, 'diag', comp)
@@ -207,17 +212,27 @@ def bayes_plot_bestGMM(title, pi, GMM_llrs, GMM_llrsn, GMM_llrst, GMM_llrsnt, GM
     bayes_error_min_act_plot_GMM(GMM_llrsnt, GMM_labels, pi, 'GMM_tied_diag', 0.4)
 
 
-def evaluation_GMM_ncomp(typeof, DTR, LTR, DTE, LTE, pi, n, zscore=False):
+def evaluation_GMM_ncomp(DTR, LTR, DTE, LTE, pi, n, zscore=False, Gauss_flag=False):
+    
     raw_min, raw_act, raw_x, GMM_llrs, GMM_llrsn, GMM_llrst, GMM_llrsnt, GMM_labels = evaluation_GMM(
-        DTR, LTR, DTE, LTE, pi, n, zscore)
+        DTR, LTR, DTE, LTE, pi, n, zscore, Gauss_flag=False)
+    gauss_min, gauss_act, gauss_x, GMM_llrs_g, GMM_llrsn_g, GMM_llrst_g, GMM_llrsnt_g, GMM_labels_g = evaluation_GMM(DTR, LTR, DTE, LTE, pi, n, zscore=zscore, Gauss_flag=True)
     print(raw_act, raw_x)
 
     types = ['full-cov', 'diag-cov', 'tied full-cov', 'tied diag-cov']
     t = PrettyTable(["", 'minDCF'])
     t.title = "GMM π=" + str(pi)
     for i in range(len(raw_min)):
-        t.add_row([typeof + " " + types[i], raw_min[i]])
+        t.add_row(["raw" + " " + types[i], raw_min[i],  raw_act[i], raw_x[i]])
+    for i in range(len(gauss_min)):
+        t.add_row(['gaussian. ' + types[i], gauss_min[i], gauss_act[i], gauss_x[i]])
     print(t)
+    
+   
+
+    raw_llr = [GMM_llrs_raw, GMM_llrsn_raw, GMM_llrst_raw, GMM_llrsnt_raw, GMM_labels_raw]
+    gauss_llr = [GMM_llrs_g, GMM_llrsn_g, GMM_llrst_g, GMM_llrsnt_g, GMM_labels_g]
+    return GMM_llrst_raw, GMM_labels_raw
 
     return GMM_llrst
     # bayes_plot_bestGMM("prova", 0.5, GMM_llrs, GMM_llrsn, GMM_llrst, GMM_llrsnt, GMM_labels)
@@ -233,7 +248,41 @@ def evaluation_scores_GMM_ncomp(typeof, DTR, LTR, DTE, LTE, pi, n, zscore=False)
 
     return GMM_llrst
 
+def evaluation_GMM_tot(DTR, LTR, DTE, LTE, pi, zscore=False, gauss=False):
+    score_raw_min = []
+    score_gauss_min = []
+    
+    score_raw_act = []
+    score_gauss_act = []
+    
+    score_raw_xvd = []
+    score_gauss_xvd = []
+    # We'll train from 1 to 2^4 components
+    
+    # We'll train from 1 to 2^4 components
+    componentsToTry=[1,2,3,4,5]
+    for comp in componentsToTry:
 
+        print('RAW DATA')
+        raw_min, raw_act, raw_xvd, *_ = evaluation_GMM(
+        DTR, LTR, DTE, LTE, pi, comp, zscore, Gauss_flag=False )
+        score_raw_min.append(raw_min)
+        score_raw_act.append(raw_act)
+        score_raw_xvd.append(raw_xvd)
+
+        print('GAUSSIANIZED')
+        gauss_min, gauss_act, gauss_xvd, *_ = evaluation_GMM(
+        DTR, LTR, DTE, LTE, pi, comp, zscore, Gauss_flag=True )
+        score_gauss_min.append(gauss_min)
+        score_gauss_act.append(gauss_act)
+        score_gauss_xvd.append(gauss_xvd)
+    print("======= min DCF =======")
+    print_minDCF_tables(score_raw_min, score_gauss_min, componentsToTry)
+    #print("======= act DCF =======")
+   # print_act_DCF_tables(score_raw_act, score_gauss_act, componentsToTry)
+   # print("======= theoretical =======")
+   # print_act_DCF_tables(score_raw_xvd, score_gauss_xvd, componentsToTry)
+    plot_minDCF_GMM_eval(score_raw_min, score_gauss_min, "GMMEval", componentsToTry)
 
 if __name__ == "__main__":
     
@@ -244,11 +293,18 @@ if __name__ == "__main__":
     #load and randomize TEST set
     DTE, LTE = load("dataset/Test.txt")
     DTE, LTE = randomize(DTE, LTE)
+
+    D_merged, L_merged, idxTR_merged, idxTE_merged = split_db_after_merge(DTR, DTE, LTR, LTE) # Merged
     
     
     print("############    Gaussian Mixture Models   ##############")
-    evaluation_GMM_ncomp(DTR, LTR, 0.5, 4)
-    evaluation_GMM_ncomp(DTR, LTR, 0.1, 4)
-    evaluation_GMM_ncomp(DTR, LTR, 0.9, 4)
+    evaluation_GMM_tot(D_merged, L_merged, DTE, LTE, 0.5)
+    
+    #evaluation_GMM_ncomp(D_merged, L_merged, DTE, LTE, 0.5, 4)
+    #evaluation_GMM_ncomp(D_merged, L_merged, DTE, LTE, 0.1, 4 )
+    #evaluation_GMM_ncomp(D_merged, L_merged, DTE, LTE, 0.9, 4 )
+    
+    
+   
 
 

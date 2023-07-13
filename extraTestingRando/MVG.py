@@ -1,4 +1,4 @@
-from utils import vcol, vrow, split_dataset
+from utils import vcol, vrow, split_dataset, gaussianize_features, znorm
 from feature_utils import covMatrix, SW_compute, PCA_givenM, Z_normalization
 from DCF import DCF_unnormalized_normalized_min_binary
 from LogReg import calibrate_scores
@@ -25,13 +25,18 @@ def loglikelihood(XND, m_ML, C_ML):
     N = XND.shape[1]
     return np.sum([logpdf_GAU_ND(vcol(XND[:, i]), m_ML, C_ML) for i in range(N)])
 
-def classifierSetup(D, L, k, idxTrain, idxTest, tied=False): 
+def classifierSetup(D, L, k, idxTrain, idxTest, tied=False, zscore=False, gauss_flag=False ): 
     # Gaussian Classifier
     (DTR, LTR), (DTE, LTE) = split_dataset(D, L, idxTrain, idxTest)
 
-    # Apply Z-normalization from training, apply the same transformation on the test set
-    DTR, mean, std = Z_normalization(DTR)
-    DTE = Z_normalization(DTE, mean, std)
+    if(zscore):
+        # Apply Z-normalization from training, apply the same transformation on the test set
+        DTR, DTE=znorm(DTR, DTE)
+    if(gauss_flag):
+        #Apply gaussianization on training set
+        D_training = DTR
+        DTR = gaussianize_features(DTR, DTR)
+        DTE = gaussianize_features(D_training, DTE)
 
     mu_arr = [vcol(DTR[:, LTR == i].mean(axis=1)) for i in range(k)]
 
@@ -65,25 +70,25 @@ def gaussianCSF(DTE, LTE, k, mu_arr, C_arr, CSF_name, triplets, show, calibrate=
             testDCF_MVG(LTE, scores, triplet)
     return scores
 
-def gaussianCSF_wrapper(D, L, k, idxTrain, idxTest, triplet=None, show=True):
-    (DTE, LTE), mu_arr, C_arr = classifierSetup(D, L, k, idxTrain, idxTest)
+def gaussianCSF_wrapper(D, L, k, idxTrain, idxTest, triplet=None, show=True, zscore=False, gauss_flag=False):
+    (DTE, LTE), mu_arr, C_arr = classifierSetup(D, L, k, idxTrain, idxTest, zscore=zscore, gauss_flag=gauss_flag)
     return gaussianCSF(DTE, LTE, k, mu_arr, C_arr, "Full Covariance ", triplet, show)
 
-def naiveBayesGaussianCSF(D, L, k, idxTrain, idxTest, triplet=None, show=True):
-    (DTE, LTE), mu_arr, C_arr = classifierSetup(D, L, k, idxTrain, idxTest)
+def naiveBayesGaussianCSF(D, L, k, idxTrain, idxTest, triplet=None, show=True, zscore=False, gauss_flag=False):
+    (DTE, LTE), mu_arr, C_arr = classifierSetup(D, L, k, idxTrain, idxTest, zscore=zscore, gauss_flag=gauss_flag)
     C_naive_arr = [C_arr[i] * np.identity(C_arr[i].shape[0]) for i in range(k)] # element by element mult.
     return gaussianCSF(DTE, LTE, k, mu_arr, C_naive_arr, "Diag Covariance ", triplet, show)
 
-def tiedCovarianceGaussianCSF(D, L, k, idxTrain, idxTest, triplet=None, show=True):
-    (DTE, LTE), mu_arr, C_arr = classifierSetup(D, L, k, idxTrain, idxTest, tied=True)
+def tiedCovarianceGaussianCSF(D, L, k, idxTrain, idxTest, triplet=None, show=True, zscore=False, gauss_flag=False):
+    (DTE, LTE), mu_arr, C_arr = classifierSetup(D, L, k, idxTrain, idxTest, tied=True, zscore=zscore, gauss_flag=gauss_flag)
     return gaussianCSF(DTE, LTE, k, mu_arr, C_arr, "Tied Full-Cov ", triplet, show)
 
-def tiedNaiveBayesGaussianCSF(D, L, k, idxTrain, idxTest, triplet=None, show=True):
-    (DTE, LTE), mu_arr, C_arr = classifierSetup(D, L, k, idxTrain, idxTest, tied=True)
+def tiedNaiveBayesGaussianCSF(D, L, k, idxTrain, idxTest, triplet=None, show=True, zscore=False, gauss_flag=False):
+    (DTE, LTE), mu_arr, C_arr = classifierSetup(D, L, k, idxTrain, idxTest, tied=True, zscore=zscore, gauss_flag=gauss_flag)
     C_naive_arr = [C_arr[i] * np.identity(C_arr[i].shape[0]) for i in range(k)] # element by element mult.
     return gaussianCSF(DTE, LTE, k, mu_arr, C_naive_arr, "Tied Diag-Cov ", triplet, show)
 
-def K_fold_MVG(D, L, k, K, classifiers, app_triplets, PCA_m=None, show=True, seed=0, calibrate=False, printStatus=False, returnScores=False):
+def K_fold_MVG(D, L, k, K, classifiers, app_triplets, PCA_m=None, show=True, seed=0, calibrate=False, printStatus=False, returnScores=False,  zscore=False, gauss_flag=False):
     if show:
         if PCA_m is not None:
             msg = f' (PCA m = {PCA_m})'
@@ -111,9 +116,9 @@ def K_fold_MVG(D, L, k, K, classifiers, app_triplets, PCA_m=None, show=True, see
                 DTR_PCA_fold = split_dataset(D, L, idxTrain, idxTest)[0][0]
                 PCA_P = PCA_givenM(DTR_PCA_fold, PCA_m)
                 D_PCA = np.dot(PCA_P.T, D)
-                scores = classifiers[i][0](D_PCA, L, k, idxTrain, idxTest, app_triplets, show=False)
+                scores = classifiers[i][0](D_PCA, L, k, idxTrain, idxTest, app_triplets, show=False, zscore=zscore, gauss_flag=gauss_flag)
             else:
-                scores = classifiers[i][0](D, L, k, idxTrain, idxTest, app_triplets, show=False)
+                scores = classifiers[i][0](D, L, k, idxTrain, idxTest, app_triplets, show=False, zscore=zscore, gauss_flag=gauss_flag)
 
             scores_all = np.concatenate((scores_all, scores))
         

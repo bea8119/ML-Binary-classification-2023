@@ -3,11 +3,13 @@ import numpy
 from utils import *
 from evaluator import *
 from plotting import *
+from calibration import *
 import matplotlib
 import matplotlib.pyplot as plt
 import pylab
 import scipy.linalg
 import sklearn.datasets
+
 import scipy.optimize as opt
 from prettytable import PrettyTable
 
@@ -98,11 +100,11 @@ def SVM_wrapper(D, L, K_svm, C, priorT_b, idxTrain, idxTest, triplet, c=None, d=
 
     scores = SVM_obj.SVM_scores(DTE, kern, Poly_RBF, bounds_list, c, d, gamma)
     
-#    if calibrate:
-#        scores, w, b = calibrate_scores(scores, LTE, 0.5)
+    if calibrate:
+        scores, w, b = calibrate_scores(scores, LTE, 0.5)
 
-#    if saveCalibration:
-#        return w, b
+    if saveCalibration:
+        return w, b
 
     if single_fold:
         return DCF_SVM(LTE, K_svm, C, scores, triplet, show, kern, Poly_RBF, priorT_b)

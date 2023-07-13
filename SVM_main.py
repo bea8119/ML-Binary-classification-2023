@@ -17,8 +17,8 @@ SVM_param_list = [ #(10, None), (10, 0.5)
      (10, 0.1) , (10, 0.9)
 ]
 
-calibrate = False
-saveScores = False
+calibrate = True
+saveScores = True
 
 # (x1T_x2 + c)^2 Polynomial kernel params
 c = 1
@@ -79,11 +79,11 @@ def main():
             for params in SVM_param_list:
                 scores = SVM.K_fold_SVM(DTR, LTR, K, K_svm, *params, triplet, m, kern=kernel_SVM, Poly_RBF=Poly_RBF, c=c, d=d, gamma=gamma, printStatus=printStatus, calibrate=calibrate, returnScores=True if saveScores else False, Gauss_flag= gauss_flag, zscore=zscore)
                 if saveScores:
-                    np.save('../data_npy/scores_SVM_K_fold_PCA_{}_calibrated.npy'.format(m if m is not None else 'None'), scores)
+                    np.save('./data_npy/scores_SVM_K_fold_PCA_{}_calibrated.npy'.format(m if m is not None else 'None'), scores)
             print('-----------------------------------------------------')
 
 '''
-            # ------------------ Using whole Train.txt dataset and classifying Test.txt (last thing to do) ----------------
+            # ------------------ Using whole Train.txt dataset and classifying Test.txt  ----------------
             if m is not None:
                 DTR_PCA_fold = u.split_dataset(D_merged, L_merged, idxTR_merged, idxTE_merged)[0][0]
                 PCA_Proj = u.PCA(DTR_PCA_fold, m) # Apply PCA over training subset

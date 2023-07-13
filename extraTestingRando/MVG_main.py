@@ -15,11 +15,15 @@ PCA_list = [None, 11, 10]
 
 printStatus = True
 
+
 calibrate = False
 saveCalScores = False
 
 def main():
     print("Starting...")
+
+    gauss_flag=False
+    zscore=False
 
     DTR, LTR = u.load('../dataset/Train.txt')
     DTE, LTE = u.load('../dataset/Test.txt')
@@ -45,23 +49,23 @@ def main():
 
     for m in PCA_list:
         pca_msg = '(no PCA)' if m is None else f'(PCA m = {m})'
-        if m is not None:
-            DTR_PCA_fold = u.split_dataset(DTR, LTR, idxTrain_s, idxTest_s)[0][0] # Retrieve single fold train subset
-            PCA_Proj = f.PCA_givenM(DTR_PCA_fold, m) # Apply PCA over Training subset
-            DTR_PCA = np.dot(PCA_Proj.T, DTR) # Project both training and validation subsets with the output of the PCA
+        # if m is not None:
+        #     DTR_PCA_fold = u.split_dataset(DTR, LTR, idxTrain_s, idxTest_s)[0][0] # Retrieve single fold train subset
+        #     PCA_Proj = f.PCA_givenM(DTR_PCA_fold, m) # Apply PCA over Training subset
+        #     DTR_PCA = np.dot(PCA_Proj.T, DTR) # Project both training and validation subsets with the output of the PCA
 
-        print('\nSingle Fold ({}-to-1) MVG classifiers {}'.format(n, pca_msg))
-        print('****************************************************')
-        for classifier in CSF_list:
-            classifier[0](DTR if m is None else DTR_PCA, LTR, k, idxTrain_s, idxTest_s, application_points, show=True)
-            print('-----------------------------------------------------')
+        # print('\nSingle Fold ({}-to-1) MVG classifiers {}'.format(n, pca_msg))
+        # print('****************************************************')
+        # for classifier in CSF_list:
+        #     classifier[0](DTR if m is None else DTR_PCA, LTR, k, idxTrain_s, idxTest_s, application_points, show=True, zscore=zscore, gauss_flag=gauss_flag)
+        #     print('-----------------------------------------------------')
 
-        # K-fold
-        scores = MVG.K_fold_MVG(DTR, LTR, k, K, CSF_list, application_points, m, calibrate=calibrate, printStatus=printStatus, returnScores=True if saveCalScores else False)
-        if saveCalScores:
-            np.save('../data_npy/scores_MVG_K_fold_PCA_{}_calibrated.npy'.format(m if m is not None else 'None'), scores)
+        # # K-fold
+        # scores = MVG.K_fold_MVG(DTR, LTR, k, K, CSF_list, application_points, m, calibrate=calibrate, printStatus=printStatus, returnScores=True if saveCalScores else False,  zscore=zscore, gauss_flag=gauss_flag)
+        # if saveCalScores:
+        #     np.save('../data_npy/scores_MVG_K_fold_PCA_{}_calibrated.npy'.format(m if m is not None else 'None'), scores)
 
-'''
+
         # ------------------ Using whole Train.txt dataset and classifying Test.txt (last thing to do) ----------------
         if m is not None:
             DTR_PCA_fold = u.split_dataset(D_merged, L_merged, idxTR_merged, idxTE_merged)[0][0]
@@ -70,9 +74,9 @@ def main():
         print('\nMVG classifiers on whole dataset {}'.format(pca_msg))
         print('****************************************************')
         for classifier in CSF_list:
-            classifier[0](D_merged if m is None else D_merged_PCA, L_merged, k, idxTR_merged, idxTE_merged, application_points, show=True)
+            classifier[0](D_merged if m is None else D_merged_PCA, L_merged, k, idxTR_merged, idxTE_merged, application_points, show=True,  zscore=zscore, gauss_flag=gauss_flag)
             print('-----------------------------------------------------')
-'''          
+         
 if __name__  == '__main__':
     main()
     

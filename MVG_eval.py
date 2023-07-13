@@ -56,7 +56,7 @@ def evaluation(title, pi, MVG_res, MVG_naive, MVG_t, MVG_nt, MVG_labels, appendT
     
     
 
-def evaluation_MVG(DTR, LTR, DTE, LTE, appendToTitle, PCA_Flag=True):
+def evaluation_MVG(DTR, LTR, DTE, LTE, appendToTitle, PCA_Flag=True, Gauss_flag=False, zscore=False):
 
     MVG_res = []
     MVG_naive = []
@@ -73,6 +73,14 @@ def evaluation_MVG(DTR, LTR, DTE, LTE, appendToTitle, PCA_Flag=True):
     PCA2_mvg_naive = []
     PCA2_mvg_t = []
     PCA2_mvg_nt = []
+
+    if (zscore):
+            DTR, DTE = znorm(DTR, DTE)
+
+    if (Gauss_flag):
+        D_training = DTR
+        DTR = gaussianize_features(DTR, DTR)
+        DTE = gaussianize_features(D_training, DTE)
 
 
     # RAW DATA
@@ -91,7 +99,7 @@ def evaluation_MVG(DTR, LTR, DTE, LTE, appendToTitle, PCA_Flag=True):
 
     if PCA_Flag is True:
         # PCA m=11
-        P = PCA(DTR, LTR, m=11)
+        P = PCA(DTR, m=11)
         DTR_PCA = numpy.dot(P.T, DTR)
         DTE_PCA = numpy.dot(P.T, DTE)
 
@@ -106,7 +114,7 @@ def evaluation_MVG(DTR, LTR, DTE, LTE, appendToTitle, PCA_Flag=True):
             MVG_labels)
 
         # PCA m=10
-        P = PCA(DTR, LTR, m=10)
+        P = PCA(DTR, m=10)
         DTR_PCA = numpy.dot(P.T, DTR)
         DTE_PCA = numpy.dot(P.T, DTE)
 
@@ -196,10 +204,12 @@ if __name__ == "__main__":
     #load and randomize TEST set
     DTE, LTE = load("dataset/Test.txt")
     DTE, LTE = randomize(DTE, LTE)
+
+    D_merged, L_merged, idxTR_merged, idxTE_merged = split_db_after_merge(DTR, DTE, LTR, LTE) # Merged
     
     print("############    MVG    ##############")
-    evaluation_MVG(DTR, LTR, 'RAW_')                           #RAW features 
-    evaluation_MVG(DTR, LTR, 'GAUSSIANIZED_', Gauss_flag=True) #Gaussianized features
-    evaluation_MVG(DTR, LTR, 'ZNORM_', zscore=True)            #Z-normed features
+    #evaluation_MVG(D_merged, L_merged, DTE, LTE, 'RAW_')                           #RAW features 
+    evaluation_MVG(D_merged, L_merged, DTE, LTE, 'GAUSSIANIZED_', Gauss_flag=True) #Gaussianized features
+    #evaluation_MVG(D_merged, L_merged, DTE, LTE, 'ZNORM_', zscore=True)            #Z-normed features
     
     

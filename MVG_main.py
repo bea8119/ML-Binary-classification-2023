@@ -132,7 +132,7 @@ def validation_MVG(DTR, LTR, appendToTitle, PCA_Flag=True, Gauss_flag = False, z
         if PCA_Flag is True:
             
             # PCA m=11
-            P = PCA(D, L, m=11)
+            P = PCA(D,  m=11)
             DTR_PCA = np.dot(P.T, D)
             DTE_PCA = np.dot(P.T, Dte)
 
@@ -147,7 +147,7 @@ def validation_MVG(DTR, LTR, appendToTitle, PCA_Flag=True, Gauss_flag = False, z
                 MVG_labels)
 
             # PCA m=10
-            P = PCA(D, L, m=10)
+            P = PCA(D,  m=10)
             DTR_PCA = np.dot(P.T, D)
             DTE_PCA = np.dot(P.T, Dte)
 
