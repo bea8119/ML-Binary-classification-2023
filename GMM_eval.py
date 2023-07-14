@@ -249,41 +249,50 @@ def evaluation_scores_GMM_ncomp(typeof, DTR, LTR, DTE, LTE, pi, n, zscore=False)
     return GMM_llrst
 
 def evaluation_GMM_tot(DTR, LTR, DTE, LTE, pi, zscore=False, gauss=False):
-    score_raw_min = []
-    score_gauss_min = []
+    score_raw_val = []
+    score_gauss_val = []
+
+    score_raw_eval = []
+    score_gauss_eval = []
     
-    score_raw_act = []
-    score_gauss_act = []
-    
-    score_raw_xvd = []
-    score_gauss_xvd = []
-    # We'll train from 1 to 2^4 components
-    
+    DTE_gauss = gaussianize_features(DTR, DTE)
+    DTR_gauss = gaussianize_features(DTR, DTR)
+        
     # We'll train from 1 to 2^4 components
     componentsToTry=[1,2,3,4,5]
     for comp in componentsToTry:
 
         print('RAW DATA')
-        raw_min, raw_act, raw_xvd, *_ = evaluation_GMM(
-        DTR, LTR, DTE, LTE, pi, comp, zscore, Gauss_flag=False )
-        score_raw_min.append(raw_min)
-        score_raw_act.append(raw_act)
-        score_raw_xvd.append(raw_xvd)
+        #validation
+        raw_min, *_ = kfold_GMM(DTR, LTR, 0.5, comp, Gauss_flag=False)
+        #evaluation
+        raw_eval, *_ = evaluation_GMM(DTR, LTR, DTE, LTE, pi, comp, zscore, Gauss_flag=False )
+        
+        score_raw_val.append(raw_min)
+        score_raw_eval.append(raw_eval)
 
         print('GAUSSIANIZED')
-        gauss_min, gauss_act, gauss_xvd, *_ = evaluation_GMM(
-        DTR, LTR, DTE, LTE, pi, comp, zscore, Gauss_flag=True )
-        score_gauss_min.append(gauss_min)
-        score_gauss_act.append(gauss_act)
-        score_gauss_xvd.append(gauss_xvd)
-    print("======= min DCF =======")
-    print_minDCF_tables(score_raw_min, score_gauss_min, componentsToTry)
-    #print("======= act DCF =======")
-   # print_act_DCF_tables(score_raw_act, score_gauss_act, componentsToTry)
-   # print("======= theoretical =======")
-   # print_act_DCF_tables(score_raw_xvd, score_gauss_xvd, componentsToTry)
-    plot_minDCF_GMM_eval(score_raw_min, score_gauss_min, "GMMEval", componentsToTry)
+        gauss_min, *_ = kfold_GMM(DTR, LTR, 0.5, comp, Gauss_flag=True)
+        gauss_eval, *_ = evaluation_GMM(DTR_gauss, LTR, DTE_gauss, LTE, 0.5, comp)
+        score_gauss_val.append(gauss_min)
+        score_gauss_eval.append(gauss_eval)
+        
+        
+    n_comp = len(componentsToTry)
+    score_raw_val = np.reshape(np.hstack(score_raw_eval), (n_comp, 4)).T
+    score_gauss_val = np.reshape(np.hstack(score_gauss_eval), (n_comp, 4)).T
 
+    score_raw_eval = np.reshape(np.hstack(score_raw_eval), (n_comp, 4)).T
+    score_gauss_eval = np.reshape(np.hstack(score_gauss_eval), (n_comp, 4)).T
+
+    types = ['full-cov', 'diag-cov', 'tied full-cov', 'tied diag-cov']
+    for i in range(len(types)):
+        plot_minDCF_GMM_eval(
+            [score_raw_val[i].tolist(), score_raw_eval[i].tolist()],
+            [score_gauss_val[i].tolist(), score_gauss_eval[i].tolist()],
+            types[i],
+            componentsToTry)
+        
 if __name__ == "__main__":
     
     #load and randomize TRAINING set
