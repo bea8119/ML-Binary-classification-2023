@@ -1,12 +1,54 @@
 import numpy as np
 import time
 
+
+
 def compute_confusion_matrix(predL, trueL, K):
 	conf_matrix = np.zeros((K, K))
 	for pCls, tCls in zip(predL, trueL):
 		conf_matrix[pCls, tCls] += 1
 
 	return conf_matrix
+
+def assign_labels(scores, pi, Cfn, Cfp, th=None):
+    if th is None:
+        th = -np.log(pi * Cfn) + np.log((1 - pi) * Cfp)
+    P = scores > th
+    return np.int32(P)
+
+
+def confusion_matrix_binary(Lpred, LTE):
+    C = np.zeros((2, 2))
+    C[0, 0] = ((Lpred == 0) * (LTE == 0)).sum()
+    C[0, 1] = ((Lpred == 0) * (LTE == 1)).sum()
+    C[1, 0] = ((Lpred == 1) * (LTE == 0)).sum()
+    C[1, 1] = ((Lpred == 1) * (LTE == 1)).sum()
+    return C
+
+#! ↓↓↓↓↓↓↓↓↓ EMPIRICAL BAYES RISK (DCF) ↓↓↓↓↓↓↓↓↓
+
+#in bunary case, the empirical_Bayes (same thing as DCF)= pi * C_fn *FNR + (1-pi) * Cfp * FPR 
+def compute_emp_Bayes_binary(CM, pi, Cfn, Cfp):
+    fnr = CM[0, 1] / (CM[0, 1] + CM[1, 1])  #false negative rate
+    fpr = CM[1, 0] / (CM[0, 0] + CM[1, 0])  #false positive rate
+    return pi * Cfn * fnr + (1 - pi) * Cfp * fpr
+
+
+def compute_normalized_emp_Bayes(CM, pi, Cfn, Cfp): #NORMALIZED DCF= DCF/ min(pi*Cfn, (1-pi)*Cfp)
+                                                    #if NORM_DCF>=1, then our model is WORSE or EQUAL to a dummy model that assigns all samples to class false (pi*Cfn) or to class positive ( (1-pi)*Cfp)
+    empBayes = compute_emp_Bayes_binary(CM, pi, Cfn, Cfp)
+    return empBayes / min(pi * Cfn, (1 - pi) * Cfp) 
+
+
+
+
+
+
+
+
+
+
+
 
 
 def compute_optBayes_decisions(scores, pi_1=None, C_fn=None, C_fp=None, given_threshold=None):
@@ -98,3 +140,20 @@ def DCF_unnormalized_normalized_multiclass(prior_p, misclsf_ratios, cost_matrix,
 	dcf_norm = dcf_u / norm_term
 
 	return (dcf_u, dcf_norm)
+
+def compute_act_DCF(scores, labels, pi, Cfn, Cfp, th=None):
+    Pred = assign_labels(scores, pi, Cfn, Cfp, th=th)    #predictions of labels
+    CM = confusion_matrix_binary(Pred, labels)           #confusion matrix:  [TN    FN]
+                                                         #                   [FP    TP]
+    return compute_normalized_emp_Bayes(CM, pi, Cfn, Cfp)# return the cost for this given set of predictions that generates a given number of False positives and False Negatives!
+
+def compute_min_DCF(scores, labels, pi, Cfn, Cfp):  
+    t = np.array(scores)    
+    t.sort()                     
+    np.concatenate([np.array([-np.inf]), t, np.array([np.inf])])
+    
+    dcfList = []
+    for _th in t:
+        dcfList.append(compute_act_DCF(scores, labels, pi, Cfn, Cfp, th=_th))
+        
+    return np.array(dcfList).min()   

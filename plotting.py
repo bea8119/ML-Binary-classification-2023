@@ -394,6 +394,18 @@ def DET_curves(FPR_list, FNR_list, csf_names):
     plt.legend(loc='best')
     return fig
 
+
+
+
+
+
+
+
+
+
+
+
+#########################################################################################
 def bayes_error_plots(effPriors, DCF_list, param_list, title):
     fig = plt.figure('Bayes error plot - ' + title)
     for DCF, (label, dashed, color) in zip(DCF_list, param_list):

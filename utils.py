@@ -6,6 +6,7 @@ import scipy.linalg
 import sklearn.datasets
 import scipy.optimize as opt
 from prettytable import PrettyTable
+from DCF import *
 
 
 def mcol(oneDarray):
@@ -166,3 +167,59 @@ def reduced_dataset(D, L, N, seed=0):
 
 
 ###########################################################################
+
+def calculate_lbgf(H, DTR, C):
+    def JDual(alpha):
+        Ha = np.dot(H, mcol(alpha))
+        aHa = np.dot(mrow(alpha), Ha)
+        a1 = alpha.sum()
+        return -0.5 * aHa.ravel() + a1, -Ha.ravel() + np.ones(alpha.size)
+
+    def LDual(alpha):
+        loss, grad = JDual(alpha)
+        return -loss, -grad
+
+    alphaStar, _x, _y = scipy.optimize.fmin_l_bfgs_b(
+        LDual,
+        np.zeros(DTR.shape[1]),
+        bounds=[(0, C)] * DTR.shape[1],
+        factr=1.0,
+        maxiter=10000,
+        maxfun=100000,
+    )
+    return alphaStar, JDual, LDual
+
+def train_SVM_RBF(DTR, LTR, C, K=1, gamma=1.):
+    Z = np.zeros(LTR.shape)
+    Z[LTR == 1] = 1
+    Z[LTR == 0] = -1
+
+    # kernel function
+    kernel = np.zeros((DTR.shape[1], DTR.shape[1]))
+    for i in range(DTR.shape[1]):
+        for j in range(DTR.shape[1]):
+            kernel[i, j] = np.exp(-gamma * (np.linalg.norm(DTR[:, i] - DTR[:, j]) ** 2)) + K * K
+    H = mcol(Z) * mrow(Z) * kernel
+
+    alphaStar, JDual, LDual = calculate_lbgf(H, DTR, C)
+
+    return alphaStar, JDual(alphaStar)[0]
+
+def bayes_error_plot(pArray, scores, labels, minCost=False, th=None):
+    y = []
+    for p in pArray:
+        pi = 1.0 / (1.0 + np.exp(-p))
+        if minCost:
+            y.append(compute_min_DCF(scores, labels, pi, 1, 1))
+        else:
+            y.append(compute_act_DCF(scores, labels, pi, 1, 1, th))
+    return np.array(y)
+
+def bayes_error_min_act_plot(D, LTE, title, ylim):
+    p = np.linspace(-4, 4, 35)
+    pylab.title(title)
+    pylab.plot(p, bayes_error_plot(p, D, LTE, minCost=False), color='b')
+    pylab.plot(p, bayes_error_plot(p, D, LTE, minCost=True), 'b--')
+    pylab.ylim(0, ylim)
+    pylab.savefig('./images/DCF_' + title + '.svg')
+    pylab.show()

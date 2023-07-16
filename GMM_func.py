@@ -268,6 +268,8 @@ def GMM_Full(DTR,DTE,LTR,alpha, G, typeOf ,psi = 0.01):
     _,llr1=logpdf_GMM(DTE,gmm1)
 
     return llr1-llr0
+
+
         
 def GMM_EM_diag(X, gmm, psi=0.01):
     '''
