@@ -1,0 +1,19 @@
+Application point (pi_eff: 0.5, C_fn: 1, C_fp: 1)
+****************************************************
+Linear SVM on whole dataset (no PCA)
+        Linear SVM (K = 1, C = 0.1, priorT = unb) -> min DCF: 0.123    act DCF: 0.139
+        Linear SVM (K = 1, C = 0.1, priorT = 0.5) -> min DCF: 0.119    act DCF: 0.121
+-----------------------------------------------------
+
+Application point (pi_eff: 0.1, C_fn: 1, C_fp: 1)
+****************************************************
+Linear SVM on whole dataset (no PCA)
+        Linear SVM (K = 1, C = 0.1, priorT = unb) -> min DCF: 0.322    act DCF: 0.375
+        Linear SVM (K = 1, C = 0.1, priorT = 0.5) -> min DCF: 0.308    act DCF: 0.419
+-----------------------------------------------------
+
+Application point (pi_eff: 0.9, C_fn: 1, C_fp: 1)
+****************************************************
+Linear SVM on whole dataset (no PCA)
+        Linear SVM (K = 1, C = 0.1, priorT = unb) -> min DCF: 0.288    act DCF: 0.494
+        Linear SVM (K = 1, C = 0.1, priorT = 0.5) -> min DCF: 0.294    act DCF: 0.394

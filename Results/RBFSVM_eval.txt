@@ -1,0 +1,25 @@
+Application point (pi_eff: 0.5, C_fn: 1, C_fp: 1)
+****************************************************
+RBF Kernel SVM on whole dataset (no PCA)
+        RBF Kernel SVM (K = 1, C = 10, priorT = unb) -> min DCF: 0.11    act DCF: 0.141
+        RBF Kernel SVM (K = 1, C = 10, priorT = 0.5) -> min DCF: 0.11    act DCF: 0.141
+        RBF Kernel SVM (K = 1, C = 10, priorT = 0.1) -> min DCF: 0.098    act DCF: 0.129
+        RBF Kernel SVM (K = 1, C = 10, priorT = 0.9) -> min DCF: 0.107    act DCF: 0.139
+-----------------------------------------------------
+
+Application point (pi_eff: 0.1, C_fn: 1, C_fp: 1)
+****************************************************
+RBF Kernel SVM on whole dataset (no PCA)
+        RBF Kernel SVM (K = 1, C = 10, priorT = unb) -> min DCF: 0.362    act DCF: 0.933
+        RBF Kernel SVM (K = 1, C = 10, priorT = 0.5) -> min DCF: 0.362    act DCF: 0.933
+        RBF Kernel SVM (K = 1, C = 10, priorT = 0.1) -> min DCF: 0.306    act DCF: 0.955
+        RBF Kernel SVM (K = 1, C = 10, priorT = 0.9) -> min DCF: 0.362    act DCF: 0.943
+-----------------------------------------------------
+
+Application point (pi_eff: 0.9, C_fn: 1, C_fp: 1)
+****************************************************
+RBF Kernel SVM on whole dataset (no PCA)
+        RBF Kernel SVM (K = 1, C = 10, priorT = unb) -> min DCF: 0.255    act DCF: 0.962
+        RBF Kernel SVM (K = 1, C = 10, priorT = 0.5) -> min DCF: 0.255    act DCF: 0.962
+        RBF Kernel SVM (K = 1, C = 10, priorT = 0.1) -> min DCF: 0.251    act DCF: 0.964
+        RBF Kernel SVM (K = 1, C = 10, priorT = 0.9) -> min DCF: 0.252    act DCF: 0.966
